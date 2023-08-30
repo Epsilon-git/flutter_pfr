@@ -1,0 +1,14 @@
+{
+  "files.exclude": {
+    ".dart_tool": true,
+    ".flutter-plugins": true,
+    ".flutter-plugins-dependencies": true,
+    ".metadata": true,
+    // ".vscode": true,
+    // "build": true,
+    "pubspec.lock": true,
+    "docker-compose.dev.yml": true,
+    "docker-compose.yml": true,
+    "Dockerfile": true
+  }
+}
