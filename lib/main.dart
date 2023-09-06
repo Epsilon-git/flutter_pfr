@@ -8,9 +8,15 @@ import 'package:pfr/pages/auth/auth_page.dart';
 import 'package:pfr/pages/dashboard/dashboard_page.dart';
 import 'package:pfr/pages/purpose/purpose_page.dart';
 import 'package:pfr/routes/app_pages.dart';
+import 'package:pfr/utils/firebase_helper.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   usePathUrlStrategy();
+
+  await FirebaseHelper.connect();
+
   runApp(const MyApp());
 }
 

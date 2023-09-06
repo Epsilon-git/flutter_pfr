@@ -5,14 +5,17 @@ class MyTextFieldWithBorder extends StatelessWidget {
     super.key,
     required this.hintText,
     this.prefixIcon,
+    this.controller,
   });
 
   final String hintText;
   final IconData? prefixIcon;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
         enabledBorder: const OutlineInputBorder(
@@ -40,10 +43,12 @@ class MyTextField extends StatelessWidget {
     super.key,
     required this.hintText,
     this.keyboardType,
+    this.controller,
   });
 
   final String hintText;
   final TextInputType? keyboardType;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +68,7 @@ class MyTextField extends StatelessWidget {
         ),
         const SizedBox(height: 6.0),
         TextField(
+          controller: controller,
           decoration: InputDecoration(
             hintText: hintText,
           ),

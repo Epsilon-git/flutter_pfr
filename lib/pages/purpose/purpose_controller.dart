@@ -1,19 +1,70 @@
-// ignore_for_file: avoid_dynamic_calls
+// ignore_for_file: avoid_dynamic_calls, avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:get/get.dart';
-// import 'package:pfr/models/dropped_file.dart';
+import 'package:intl/intl.dart';
+import 'package:pfr/constants.dart';
+import 'package:pfr/models/payment_type.dart';
+import 'package:pfr/models/purpose.dart';
 
 class PurposeController extends GetxController {
+  static PurposeController get to => Get.find();
+
+  LoadState loadState = LoadState.isLoad;
+
+  final _db = FirebaseFirestore.instance;
+
   late DropzoneViewController dropzoneController;
 
-  RxBool isHighlighter = false.obs;
+  var isHighlighter = false.obs;
+
+  String? selectedPayment;
+
+  final payments = <PaymentType>[];
+
+  final snilsController = TextEditingController();
+  final phoneController = TextEditingController(text: '88005553535');
+  final dateController = TextEditingController(
+    text: DateFormat('dd.MM.yyyy').format(DateTime.now()),
+  );
+  final addressController = TextEditingController(
+    text: 'Курганская область, город Волоколамск, пл. Домодедовская, 20',
+  );
+  final commentController = TextEditingController(text: 'Какой-то комментарий');
 
   @override
-  void onInit() {
-    // TODO: implement onInit
+  Future<void> onInit() async {
+    await fetchPaymentTypes();
+
+    final User? user = FirebaseAuth.instance.currentUser;
+
+    snilsController.text = user!.email!.replaceAll('@mail.ru', '');
+
+    loadState = LoadState.endLoad;
+
+    update();
+
     super.onInit();
+  }
+
+  fetchPaymentTypes() async {
+    final snapshot = await _db.collection('payment_types').get();
+
+    payments.addAll(
+      snapshot.docs.map((e) => PaymentType.fromSnapshot(e)).toList(),
+    );
+
+    selectedPayment = payments[0].id;
+  }
+
+  changePayment(String? value) {
+    selectedPayment = value;
+    update();
   }
 
   acceptFile(dynamic file) async {
@@ -45,5 +96,20 @@ class PurposeController extends GetxController {
     if (file.isEmpty) return;
 
     acceptFile(file.first);
+  }
+
+  postPurpose() {
+    final currentPurpose = Purpose(
+      snils: snilsController.text,
+      phone: phoneController.text.trim(),
+      paymentType: selectedPayment.toString(),
+      date: dateController.text.trim(),
+      address: addressController.text.trim(),
+      comment: commentController.text.trim(),
+    );
+
+    _db.collection('purposes').add(currentPurpose.toMap());
+
+    Get.back();
   }
 }

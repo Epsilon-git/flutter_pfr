@@ -19,6 +19,11 @@ dependencies:
   get: ^4.6.5
   flutter_dropzone: ^3.0.6
   dotted_border: ^2.0.0+3
+  realm: ^1.4.0
+  firebase_core: ^2.15.1
+  firebase_auth: ^4.9.0
+  cloud_firestore: ^4.9.1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
