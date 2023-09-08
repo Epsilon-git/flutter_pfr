@@ -4,7 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pfr/constants.dart';
-import 'package:pfr/models/purpose.dart';
+import 'package:pfr/models/application.dart';
+import 'package:pfr/routes/app_routes.dart';
 
 class ExtensionController extends GetxController {
   LoadState loadState = LoadState.isLoad;
@@ -14,21 +15,22 @@ class ExtensionController extends GetxController {
   final snilsController = TextEditingController();
   final phoneController = TextEditingController();
   final dateCreateController = TextEditingController();
-  final dateController = TextEditingController(
+  final dateExtensionController = TextEditingController(
     text: DateFormat('dd.MM.yyyy').format(DateTime.now()),
   );
   final addressController = TextEditingController();
   final commentController = TextEditingController();
 
-  final purposes = <Purpose>[];
+  final applications = <Application>[];
 
-  String? selectedPurpose;
+  String? selectedApplication;
+  Application? application;
 
   @override
   Future<void> onInit() async {
-    await fetchPurposes();
+    await fetchApplications();
 
-    changePurpose(purposes[0].id);
+    await changePurpose(applications[0].id);
 
     loadState = LoadState.endLoad;
 
@@ -37,27 +39,47 @@ class ExtensionController extends GetxController {
     super.onInit();
   }
 
-  fetchPurposes() async {
-    final snapshot = await _db.collection('purposes').get();
+  fetchApplications() async {
+    final snapshot = await _db.collection('applications').get();
 
-    purposes.addAll(
-      snapshot.docs.map((e) => Purpose.fromSnapshot(e)).toList(),
+    applications.addAll(
+      snapshot.docs.map((e) => Application.fromSnapshot(e)).toList(),
     );
   }
 
   changePurpose(String? value) {
-    selectedPurpose = value;
+    selectedApplication = value;
 
     final User? user = FirebaseAuth.instance.currentUser;
 
-    final purpose = purposes.firstWhere((e) => e.id == value);
+    application = applications.firstWhere((e) => e.id == value);
 
     snilsController.text = user!.email!.replaceAll('@mail.ru', '');
-    phoneController.text = purpose.phone;
-    dateCreateController.text = purpose.date;
-    addressController.text = purpose.address;
-    commentController.text = purpose.comment;
+    phoneController.text = application!.phone!;
+    dateCreateController.text = application!.dateCreate!;
+    addressController.text = application!.address!;
+    commentController.text = application!.comment!;
 
     update();
+  }
+
+  postExtensionApplication() async {
+    final currentExtension = Application(
+      snils: snilsController.text,
+      phone: phoneController.text.trim(),
+      paymentType: application!.paymentType,
+      dateCreate: dateCreateController.text.trim(),
+      dateExtension: dateExtensionController.text.trim(),
+      address: addressController.text.trim(),
+      comment: commentController.text.trim(),
+      state: ApplicationState.isExtension.name,
+    );
+
+    await _db
+        .collection('applications')
+        .doc(selectedApplication)
+        .update(currentExtension.toMap());
+
+    Get.offAllNamed(Routes.dashboard);
   }
 }

@@ -40,7 +40,7 @@ class ExtensionPage extends StatelessWidget {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: InkWell(
-                              onTap: () => Get.toNamed(Routes.dashboard),
+                              onTap: () => Get.offAllNamed(Routes.dashboard),
                               child: const Icon(Icons.arrow_back_ios_rounded),
                             ),
                           ),
@@ -70,12 +70,12 @@ class ExtensionPage extends StatelessWidget {
                           ),
 
                           ...List.generate(
-                            _.purposes.length,
+                            _.applications.length,
                             (index) => RadioListTile(
-                              value: _.purposes[index].id,
-                              groupValue: _.selectedPurpose,
+                              value: _.applications[index].id,
+                              groupValue: _.selectedApplication,
                               title: Text(
-                                'Выплата $index (${_.purposes[index].date})',
+                                'Выплата $index (${_.applications[index].dateCreate})',
                               ),
                               onChanged: (value) => _.changePurpose(value),
                             ),
@@ -104,7 +104,7 @@ class ExtensionPage extends StatelessWidget {
                           /// Текущая дата
                           MyTextField(
                             hintText: 'Дата',
-                            controller: _.dateController,
+                            controller: _.dateExtensionController,
                           ),
 
                           const SizedBox(height: 16),
@@ -140,8 +140,9 @@ class ExtensionPage extends StatelessWidget {
 
                           /// Кнопка "Отправить"
                           MyElevatedButton(
-                            title: 'Отправить',
-                            onPressed: () {},
+                            backgroundColor: Colors.amber.shade900,
+                            title: 'Продлить',
+                            onPressed: _.postExtensionApplication,
                           ),
                         ],
                       ),

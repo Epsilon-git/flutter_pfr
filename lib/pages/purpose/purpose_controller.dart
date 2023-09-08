@@ -9,8 +9,9 @@ import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pfr/constants.dart';
+import 'package:pfr/models/application.dart';
 import 'package:pfr/models/payment_type.dart';
-import 'package:pfr/models/purpose.dart';
+import 'package:pfr/routes/app_routes.dart';
 
 class PurposeController extends GetxController {
   static PurposeController get to => Get.find();
@@ -29,7 +30,7 @@ class PurposeController extends GetxController {
 
   final snilsController = TextEditingController();
   final phoneController = TextEditingController(text: '88005553535');
-  final dateController = TextEditingController(
+  final dateCreateController = TextEditingController(
     text: DateFormat('dd.MM.yyyy').format(DateTime.now()),
   );
   final addressController = TextEditingController(
@@ -98,18 +99,20 @@ class PurposeController extends GetxController {
     acceptFile(file.first);
   }
 
-  postPurpose() {
-    final currentPurpose = Purpose(
+  postApplication() {
+    final currentApplication = Application(
       snils: snilsController.text,
       phone: phoneController.text.trim(),
       paymentType: selectedPayment.toString(),
-      date: dateController.text.trim(),
+      dateCreate: dateCreateController.text.trim(),
+      dateExtension: dateCreateController.text.trim(),
       address: addressController.text.trim(),
       comment: commentController.text.trim(),
+      state: ApplicationState.isPurpose.name,
     );
 
-    _db.collection('purposes').add(currentPurpose.toMap());
+    _db.collection('applications').add(currentApplication.toMap());
 
-    Get.back();
+    Get.offAllNamed(Routes.dashboard);
   }
 }

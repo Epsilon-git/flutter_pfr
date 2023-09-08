@@ -6,15 +6,18 @@ class MyTextFieldWithBorder extends StatelessWidget {
     required this.hintText,
     this.prefixIcon,
     this.controller,
+    this.enabled = true,
   });
 
   final String hintText;
   final IconData? prefixIcon;
   final TextEditingController? controller;
+  final bool? enabled;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      enabled: enabled,
       controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
@@ -44,11 +47,13 @@ class MyTextField extends StatelessWidget {
     required this.hintText,
     this.keyboardType,
     this.controller,
+    this.enabled,
   });
 
   final String hintText;
   final TextInputType? keyboardType;
   final TextEditingController? controller;
+  final bool? enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +73,7 @@ class MyTextField extends StatelessWidget {
         ),
         const SizedBox(height: 6.0),
         TextField(
+          enabled: enabled,
           controller: controller,
           decoration: InputDecoration(
             hintText: hintText,

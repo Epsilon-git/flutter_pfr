@@ -42,7 +42,7 @@ class PurposePage extends StatelessWidget {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: InkWell(
-                              onTap: () => Get.toNamed(Routes.dashboard),
+                              onTap: () => Get.offAllNamed(Routes.dashboard),
                               child: const Icon(Icons.arrow_back_ios_rounded),
                             ),
                           ),
@@ -96,7 +96,7 @@ class PurposePage extends StatelessWidget {
                           /// Текущая дата
                           MyTextField(
                             hintText: 'Дата',
-                            controller: _.dateController,
+                            controller: _.dateCreateController,
                           ),
 
                           const SizedBox(height: 16),
@@ -134,7 +134,7 @@ class PurposePage extends StatelessWidget {
                           /// Кнопка "Отправить"
                           MyElevatedButton(
                             title: 'Отправить',
-                            onPressed: _.postPurpose,
+                            onPressed: _.postApplication,
                           ),
                         ],
                       ),

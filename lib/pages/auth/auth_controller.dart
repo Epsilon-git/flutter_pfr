@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-
 import 'package:get/get.dart';
+import 'package:pfr/data/session_data_provider.dart';
 import 'package:pfr/routes/app_routes.dart';
 
 class AuthController extends GetxController {
@@ -15,16 +14,13 @@ class AuthController extends GetxController {
       password: passController.text.trim(),
     );
 
-    if (kDebugMode) {
-      final User? user = FirebaseAuth.instance.currentUser;
+    final User? user = FirebaseAuth.instance.currentUser;
 
-      if (user == null) {
-        print('Ошибка входа в аккаунт');
-        return;
-      } else {
-        print('Пользователь вошел в систему!');
-        Get.toNamed(Routes.dashboard);
-      }
+    if (user == null) {
+      return;
+    } else {
+      SessionDataProvider().setSessionId(value: user.uid);
+      Get.toNamed(Routes.dashboard);
     }
   }
 
