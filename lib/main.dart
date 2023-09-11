@@ -13,8 +13,6 @@ import 'package:pfr/utils/firebase_helper.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  usePathUrlStrategy();
-
   await FirebaseHelper.connect();
 
   runApp(const MyApp());

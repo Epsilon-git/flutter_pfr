@@ -67,10 +67,14 @@ class DashboardPage extends StatelessWidget {
                   const SizedBox(width: 16),
 
                   MyCardButton(
+                    color:
+                        (_.terminationCount == 0) ? Colors.grey.shade400 : null,
                     title: 'Прекращение выплаты',
                     subTitle:
                         'Прекращение выплаты пенсии без юридического лица',
-                    onTap: () => Get.toNamed(Routes.termination),
+                    onTap: (_.terminationCount != 0)
+                        ? () => Get.toNamed(Routes.termination)
+                        : null,
                   ),
                 ],
               ),
@@ -163,17 +167,20 @@ class MyCardButton extends StatelessWidget {
     required this.title,
     required this.subTitle,
     required this.onTap,
+    this.color,
   });
 
   final String title;
   final String subTitle;
-  final VoidCallback onTap;
+  final Function()? onTap;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 300,
       child: Card(
+        color: color,
         elevation: 2,
         clipBehavior: Clip.hardEdge,
         child: InkWell(

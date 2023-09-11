@@ -13,11 +13,17 @@ class DashboardController extends GetxController {
 
   final payments = <PaymentType>[];
 
+  int terminationCount = 0;
+
   @override
   Future<void> onInit() async {
     await fetchApplications();
 
     await fetchPaymentTypes();
+
+    terminationCount = applications
+        .where((e) => e.state != ApplicationState.isTermination.name)
+        .length;
 
     loadState = LoadState.endLoad;
 
